@@ -11,15 +11,15 @@ app.use(cors());
 // Serve static files
 app.use(express.static('public'));
 
-// Multer configuration
-const upload = multer({ dest: 'uploads/' });
+// Use memory storage (important for Railway)
+const upload = multer({ storage: multer.memoryStorage() });
 
 // Home route
 app.get('/', function (req, res) {
   res.sendFile(__dirname + '/views/index.html');
 });
 
-// File upload route (IMPORTANT)
+// File upload route
 app.post('/api/fileanalyse', upload.single('upfile'), function (req, res) {
 
   if (!req.file) {
@@ -34,6 +34,8 @@ app.post('/api/fileanalyse', upload.single('upfile'), function (req, res) {
 
 });
 
-const listener = app.listen(process.env.PORT || 3000, function () {
-  console.log('Your app is listening on port ' + listener.address().port);
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log("Server running on port " + PORT);
 });
